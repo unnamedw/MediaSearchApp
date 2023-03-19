@@ -1,3 +1,24 @@
 <resources>
-    <string name="app_name">MediaSearchApp</string>
+    <string name="app_name">Pinder</string>
+    <string name="preferences_name">app_preferences</string>
+    <string name="kakao_api_base_url">https://dapi.kakao.com</string>
+    <string name="kakao_rest_api_key">f23c76ae75c678f7e997ac2f8ba84375</string>
+    <string name="search_title">검색</string>
+    <string name="search_hint">검색어를 입력해주세요</string>
+
+    <string name="favorite_screen_title">Favorite</string>
+
+    <string name="search_toolbar_menu_search_title">Search</string>
+    <string name="search_toolbar_menu_filter_title">Filter</string>
+    <string name="search_toolbar_menu_favorite_title">Favorite</string>
+
+    <string name="favorite_toolbar_menu_sort_title">Sort</string>
+    <string name="favorite_toolbar_menu_sort_arrange_list_title">list</string>
+    <string name="favorite_toolbar_menu_sort_arrange_gallery_title">gallery</string>
+
+    <string name="iv_media_thumbnail_description">썸네일</string>
+    <string name="iv_favorite_icon_description">좋아요</string>
+    <string name="iv_media_icon_description">미디어</string>
+
+<!--    <string name="search_fragment_load_error_toast">데이터를 가져오지 못했어요</string>-->
 </resources>

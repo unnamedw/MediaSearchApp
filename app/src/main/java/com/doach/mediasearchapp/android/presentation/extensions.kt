@@ -1,0 +1,35 @@
+package com.doach.mediasearchapp.android.presentation
+
+import android.app.Activity
+import android.content.Context
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import com.doach.mediasearchapp.android.App
+import com.doach.mediasearchapp.android.di.AppContainer
+import java.text.SimpleDateFormat
+import java.util.*
+
+fun Activity.getContainer(): AppContainer {
+    return (application as App).appContainer
+}
+fun Fragment.getContainer(): AppContainer {
+    return requireActivity().getContainer()
+}
+fun Float.toPixel(context: Context): Int = (context.resources.displayMetrics.density * this).toInt()
+
+private var toast: Toast? = null
+fun Context.showToast(msg: String) {
+    toast?.cancel()
+    toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT)
+    toast?.show()
+}
+fun Fragment.showToast(msg: String) {
+    toast?.cancel()
+    toast = Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT)
+    toast?.show()
+}
+
+fun Long.toFormattedTime(pattern: String): String {
+    val sdf = SimpleDateFormat(pattern, Locale.KOREA)
+    return sdf.format(Date(this))
+}
