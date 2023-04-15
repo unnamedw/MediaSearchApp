@@ -29,7 +29,7 @@ class HomeViewModel(
 
     private val queryFlow = MutableSharedFlow<String>()
 
-    val mediaFlow = queryFlow.flatMapLatest {
+    val mediaFlow: Flow<PagingData<MediaItemUiState>> = queryFlow.flatMapLatest {
         pagingDataFlow(it)
     }.map {
         it.map { mediaWithFavorite ->
@@ -42,10 +42,11 @@ class HomeViewModel(
         }
     }.catch {
         _eventShowToast.value = it.message
+//        emptyFlow<PagingData<MediaItemUiState>>()
     }.cachedIn(viewModelScope)
 
     private suspend fun pagingDataFlow(queryString: String): Flow<PagingData<MediaWithFavorite>> =
-        getMediaFlowByQueryUseCase(queryString)
+        getMediaFlowByQueryUseCase.invoke(queryString, viewModelScope)
 
     fun submitQuery(query: String) {
         viewModelScope.launch {
@@ -59,12 +60,9 @@ class HomeViewModel(
 
     private fun clickFavorite(uiState: MediaItemUiState) {
         when {
-            uiState.isFavorite -> {
-//                mediaRepository.insertMedia()
-            }
-            else -> {
-//                mediaRepository.removeMedia()
-            }
+            uiState.isFavorite -> mediaRepository.removeMedia(uiState.media)
+
+            else -> mediaRepository.insertMedia(uiState.media)
         }
     }
 

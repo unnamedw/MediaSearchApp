@@ -1,12 +1,14 @@
 package com.doach.mediasearchapp.android.presentation
 
 import android.content.Context
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.doach.mediasearchapp.android.R
 import com.doach.mediasearchapp.android.databinding.MediaViewholderBinding
 import com.doach.mediasearchapp.android.domain.model.Media
 import com.doach.mediasearchapp.android.domain.model.Video
+
 class MediaViewHolder(
     private val binding: MediaViewholderBinding
 ): RecyclerView.ViewHolder(binding.root) {
@@ -36,10 +38,11 @@ class MediaViewHolder(
 
         when(uiState.media) {
             is Video -> {
-                binding.ivMediaIcon.setImageResource(R.drawable.ic_video)
+                binding.cvPlaytime.visibility = View.VISIBLE
+                binding.tvPlaytime.text = uiState.media.playTimeSeconds.toLong().formatDuration()
             }
             else -> {
-                binding.ivMediaIcon.setImageResource(R.drawable.ic_image)
+                binding.cvPlaytime.visibility = View.GONE
             }
         }
 
@@ -48,6 +51,7 @@ class MediaViewHolder(
         Glide.with(context)
             .load(uiState.media.thumbnailUrl)
             .placeholder(R.drawable.loading_animation)
+            .error(R.drawable.ic_error)
             .centerCrop()
             .into(binding.ivThumbnail)
     }
@@ -58,5 +62,3 @@ data class MediaItemUiState(
     val onFavoriteClick: (MediaItemUiState) -> Unit,
     val isFavorite: Boolean = false
 )
-
-sealed object {}

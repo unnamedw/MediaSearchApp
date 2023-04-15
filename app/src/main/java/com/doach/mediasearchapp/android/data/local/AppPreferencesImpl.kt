@@ -5,15 +5,11 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.doach.mediasearchapp.android.R
 import com.doach.mediasearchapp.android.domain.model.Media
-import com.google.gson.Gson
-import com.google.gson.JsonArray
-import com.google.gson.JsonElement
+import com.doach.mediasearchapp.android.utils.MediaDeserializer
+import com.google.gson.*
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.callbackFlow
 import org.json.JSONArray
 
 class AppPreferencesImpl(context: Context): AppPreferences {
@@ -23,7 +19,9 @@ class AppPreferencesImpl(context: Context): AppPreferences {
         Context.MODE_PRIVATE
     )
 
-    private val gson = Gson()
+    private val gson = GsonBuilder()
+        .registerTypeAdapter(Media::class.java, MediaDeserializer())
+        .create()
 
     private val _favoriteMediaFlow = MutableStateFlow(getAllFavoriteMedia())
     override fun getAllFavoriteMediaFlow() = _favoriteMediaFlow.asStateFlow()

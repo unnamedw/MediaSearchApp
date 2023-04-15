@@ -21,9 +21,17 @@ class FavoriteViewModel(
             MediaItemUiState(
                 media = media,
                 onClick = {  },
-                onFavoriteClick = {  },
+                onFavoriteClick = { state -> clickFavorite(state) },
                 isFavorite = true
             )
+        }
+    }
+
+    private fun clickFavorite(uiState: MediaItemUiState) {
+        when {
+            uiState.isFavorite -> mediaRepository.removeMedia(uiState.media)
+
+            else -> mediaRepository.insertMedia(uiState.media)
         }
     }
 

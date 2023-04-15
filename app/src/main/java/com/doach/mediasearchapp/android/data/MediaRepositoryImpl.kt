@@ -1,5 +1,6 @@
 package com.doach.mediasearchapp.android.data
 
+import android.widget.Toast
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -10,6 +11,7 @@ import com.doach.mediasearchapp.android.domain.model.Media
 import com.doach.mediasearchapp.android.domain.repository.MediaRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
+import timber.log.Timber
 
 class MediaRepositoryImpl(
     private val api: ApiService,
@@ -28,6 +30,11 @@ class MediaRepositoryImpl(
             }
         ).flow
             .flowOn(ioDispatcher)
+//            .catch {
+//                it.printStackTrace()
+//                Timber.d("오류! >> ${it.stackTraceToString()}")
+////                emptyFlow<PagingData<Media>>()
+//            }
     }
 
     override fun getFavoriteMediaFlow(): Flow<List<Media>> {

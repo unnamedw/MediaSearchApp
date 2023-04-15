@@ -38,11 +38,13 @@ class MediaPagingSource(
             val videoResponse = videoResponseAsync.await()
             val imageResponse = imageResponseAsync.await()
 
-            val nextKey = if (imageResponse.meta.isEnd && videoResponse.meta.isEnd) {
+            val nextKey = if (imageResponse.meta.isEnd || videoResponse.meta.isEnd) {
                 null
             } else {
                 nextPageNumber + 1
             }
+
+            Timber.d("nextKey >> $nextKey")
 
             val videoList = videoResponse.documents.map { it.toDomainModel() }
             val imageList = imageResponse.documents.map { it.toDomainModel() }
@@ -64,6 +66,13 @@ class MediaPagingSource(
     }
 
     override fun getRefreshKey(state: PagingState<Int, Media>): Int? {
+        // Try to find the page key of the closest page to anchorPosition, from
+        // either the prevKey or the nextKey, but you need to handle nullability
+        // here:
+        //  * prevKey == null -> anchorPage is the first page.
+        //  * nextKey == null -> anchorPage is the last page.
+        //  * both prevKey and nextKey null -> anchorPage is the initial page, so
+        //    just return null.
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)

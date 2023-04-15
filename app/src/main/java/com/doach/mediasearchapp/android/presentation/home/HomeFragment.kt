@@ -58,6 +58,11 @@ class HomeFragment: Fragment(), MenuProvider {
     }
 
     private fun initView() {
+        binding.swipeLayout.setOnRefreshListener {
+            mediaAdapter.refresh()
+            binding.swipeLayout.isRefreshing = false
+        }
+
         mediaAdapter.addLoadStateListener { loadState ->
             val errorState = when {
                 loadState.append is LoadState.Error -> loadState.append as LoadState.Error
