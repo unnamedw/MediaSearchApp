@@ -11,8 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.doach.mediasearchapp.android.R
 import com.doach.mediasearchapp.android.databinding.FragmentFavoriteBinding
+import com.doach.mediasearchapp.android.domain.model.Image
+import com.doach.mediasearchapp.android.domain.model.Video
 import com.doach.mediasearchapp.android.presentation.FavoriteMediaAdapter
 import com.doach.mediasearchapp.android.presentation.getContainer
+import com.doach.mediasearchapp.android.presentation.openCustomTab
 import com.doach.mediasearchapp.android.presentation.showToast
 import kotlinx.coroutines.flow.collectLatest
 
@@ -38,10 +41,29 @@ class FavoriteFragment: Fragment(), MenuProvider {
 
     private fun bindViewModel() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.favoriteList.collectLatest {
+            viewModel.favoriteListFlow.collectLatest {
                 favoriteAdapter.submitList(it)
             }
         }
+
+        viewModel.eventShowMediaDetail.observe(viewLifecycleOwner) { media ->
+            when (media) {
+                is Video -> showVideo(media)
+                is Image -> showImage(media)
+            }
+        }
+    }
+
+    private fun showImage(image: Image) {
+        // TODO: replace below code with right way
+        showToast(image.title)
+        requireContext().openCustomTab(image.url)
+    }
+
+    private fun showVideo(video: Video) {
+        // TODO: replace below code with right way
+        showToast(video.title)
+        requireContext().openCustomTab(video.url)
     }
 
     private fun initView() {

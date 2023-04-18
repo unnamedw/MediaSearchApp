@@ -10,6 +10,8 @@ interface MediaRepository {
 
     fun getFavoriteMediaFlow(): Flow<List<Media>>
 
+    fun getFavoriteMedia(): List<Media>
+
     fun insertMedia(vararg media: Media)
 
     fun removeMedia(vararg media: Media)

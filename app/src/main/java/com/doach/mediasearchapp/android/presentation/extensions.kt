@@ -2,12 +2,15 @@ package com.doach.mediasearchapp.android.presentation
 
 import android.app.Activity
 import android.content.Context
+import android.net.Uri
 import android.widget.Toast
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import com.doach.mediasearchapp.android.App
 import com.doach.mediasearchapp.android.di.AppContainer
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 fun Activity.getContainer(): AppContainer {
     return (application as App).appContainer
@@ -40,4 +43,10 @@ fun Long.formatDuration(): String {
     val seconds = this % 60
 
     return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+}
+
+fun Context.openCustomTab(url: String) {
+    val builder = CustomTabsIntent.Builder()
+    val customTabsIntent = builder.build()
+    customTabsIntent.launchUrl(this, Uri.parse(url))
 }

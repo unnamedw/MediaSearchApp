@@ -16,6 +16,7 @@ import com.doach.mediasearchapp.android.domain.model.Image
 import com.doach.mediasearchapp.android.domain.model.Video
 import com.doach.mediasearchapp.android.presentation.MediaAdapter
 import com.doach.mediasearchapp.android.presentation.getContainer
+import com.doach.mediasearchapp.android.presentation.openCustomTab
 import com.doach.mediasearchapp.android.presentation.showToast
 
 class HomeFragment: Fragment(), MenuProvider {
@@ -94,11 +95,13 @@ class HomeFragment: Fragment(), MenuProvider {
     private fun showImage(image: Image) {
         // TODO: replace below code with right way
         showToast(image.title)
+        requireContext().openCustomTab(image.url)
     }
 
     private fun showVideo(video: Video) {
         // TODO: replace below code with right way
         showToast(video.title)
+        requireContext().openCustomTab(video.url)
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
