@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import com.doach.mediasearchapp.android.BuildConfig
 import com.doach.mediasearchapp.android.R
 import com.doach.mediasearchapp.android.databinding.FragmentHomeBinding
 import com.doach.mediasearchapp.android.domain.model.Image
@@ -94,13 +95,17 @@ class HomeFragment: Fragment(), MenuProvider {
 
     private fun showImage(image: Image) {
         // TODO: replace below code with right way
-        showToast(image.title)
+        if (BuildConfig.DEBUG) {
+            showToast(image.title)
+        }
         requireContext().openCustomTab(image.url)
     }
 
     private fun showVideo(video: Video) {
         // TODO: replace below code with right way
-        showToast(video.title)
+        if (BuildConfig.DEBUG) {
+            showToast(video.title)
+        }
         requireContext().openCustomTab(video.url)
     }
 
@@ -123,6 +128,7 @@ class HomeFragment: Fragment(), MenuProvider {
                 }
 
             })
+
         }
     }
 

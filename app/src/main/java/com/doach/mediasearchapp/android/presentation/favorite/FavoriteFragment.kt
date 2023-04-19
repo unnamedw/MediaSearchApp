@@ -5,10 +5,10 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.doach.mediasearchapp.android.BuildConfig
 import com.doach.mediasearchapp.android.R
 import com.doach.mediasearchapp.android.databinding.FragmentFavoriteBinding
 import com.doach.mediasearchapp.android.domain.model.Image
@@ -56,13 +56,17 @@ class FavoriteFragment: Fragment(), MenuProvider {
 
     private fun showImage(image: Image) {
         // TODO: replace below code with right way
-        showToast(image.title)
+        if (BuildConfig.DEBUG) {
+            showToast(image.title)
+        }
         requireContext().openCustomTab(image.url)
     }
 
     private fun showVideo(video: Video) {
         // TODO: replace below code with right way
-        showToast(video.title)
+        if (BuildConfig.DEBUG) {
+            showToast(video.title)
+        }
         requireContext().openCustomTab(video.url)
     }
 
@@ -88,11 +92,15 @@ class FavoriteFragment: Fragment(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.menu_arrange_list -> {
-                showToast("click list!")
+                if (BuildConfig.DEBUG) {
+                    showToast("click list!")
+                }
                 true
             }
             R.id.menu_arrange_gallery -> {
-                showToast("click gallery!")
+                if (BuildConfig.DEBUG) {
+                    showToast("click gallery!")
+                }
                 true
             }
             else -> true
