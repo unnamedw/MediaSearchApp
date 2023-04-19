@@ -18,7 +18,7 @@ class MediaViewHolder(
     init {
         binding.frameThumbnail.setOnClickListener {
             uiState?.let {
-                it.onClick.invoke(it)
+                it.onItemClick.invoke(it)
             }
         }
 
@@ -58,7 +58,7 @@ class MediaViewHolder(
 }
 data class MediaItemUiState(
     val media: Media,
-    val onClick: (MediaItemUiState) -> Unit,
+    val onItemClick: (MediaItemUiState) -> Unit,
     val onFavoriteClick: (MediaItemUiState) -> Unit,
     val isFavorite: Boolean = false
 )

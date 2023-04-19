@@ -35,8 +35,8 @@ class HomeViewModel(
         it.map { mediaWithFavorite ->
             MediaItemUiState(
                 media = mediaWithFavorite.media,
-                onClick = { clickMediaItem(mediaWithFavorite.media) },
-                onFavoriteClick = { state -> clickFavorite(state) },
+                onItemClick = ::onItemClick,
+                onFavoriteClick = ::onFavoriteClick,
                 isFavorite = mediaWithFavorite.isFavorite
             )
         }
@@ -54,11 +54,11 @@ class HomeViewModel(
         }
     }
 
-    private fun clickMediaItem(media: Media) {
-        _eventShowMediaDetail.value = media
+    private fun onItemClick(uiState: MediaItemUiState) {
+        _eventShowMediaDetail.value = uiState.media
     }
 
-    private fun clickFavorite(uiState: MediaItemUiState) {
+    private fun onFavoriteClick(uiState: MediaItemUiState) {
         when {
             uiState.isFavorite -> mediaRepository.removeMedia(uiState.media)
 

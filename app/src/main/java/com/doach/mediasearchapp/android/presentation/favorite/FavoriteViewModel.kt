@@ -30,22 +30,21 @@ class FavoriteViewModel(
             val isMediaExistInUpdatedFavoriteList = updatedList.find { it.url == media.url } != null
             MediaItemUiState(
                 media = media,
-                onClick = { clickMediaItem(media) },
-                onFavoriteClick = { state -> clickFavorite(state) },
+                onItemClick = ::onItemClick,
+                onFavoriteClick = ::onFavoriteClick,
                 isFavorite = isMediaExistInUpdatedFavoriteList
             )
         }
     }
-
-    private fun clickMediaItem(media: Media) {
-        _eventShowMediaDetail.value = media
-    }
-
-    private fun clickFavorite(uiState: MediaItemUiState) {
+    private fun onFavoriteClick(uiState: MediaItemUiState) {
         when {
             uiState.isFavorite -> mediaRepository.removeMedia(uiState.media)
             else -> mediaRepository.insertMedia(uiState.media)
         }
+    }
+
+    private fun onItemClick(uiState: MediaItemUiState) {
+        _eventShowMediaDetail.value = uiState.media
     }
 
     class Factory(
