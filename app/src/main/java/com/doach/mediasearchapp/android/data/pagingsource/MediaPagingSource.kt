@@ -6,7 +6,7 @@ import com.doach.mediasearchapp.android.data.remote.dto.toDomainModel
 import com.doach.mediasearchapp.android.data.remote.retrofit.ApiService
 import com.doach.mediasearchapp.android.domain.model.Media
 import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.supervisorScope
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
@@ -16,9 +16,9 @@ class MediaPagingSource(
     private val query: String
 ): PagingSource<Int, Media>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Media> = coroutineScope {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Media> = supervisorScope {
         Timber.d("paging test >> key: ${params.key}, loadSize: ${params.loadSize}")
-        try {
+        return@supervisorScope try {
             val nextPageNumber = params.key ?: startPage
             val videoResponseAsync = async {
                 api.getVideoList(
@@ -38,7 +38,7 @@ class MediaPagingSource(
             val videoResponse = videoResponseAsync.await()
             val imageResponse = imageResponseAsync.await()
 
-            val nextKey = if (imageResponse.meta.isEnd || videoResponse.meta.isEnd) {
+            val nextKey = if (imageResponse.meta.isEnd && videoResponse.meta.isEnd) {
                 null
             } else {
                 nextPageNumber + 1
@@ -61,18 +61,15 @@ class MediaPagingSource(
             LoadResult.Error(e)
         } catch (e: HttpException) {
             e.printStackTrace()
-            LoadResult.Error(e)
+            if (e.code() == 400) {
+                LoadResult.Error(Exception("페이지가 더 이상 존재하지 않습니다"))
+            } else {
+                LoadResult.Error(e)
+            }
         }
     }
 
     override fun getRefreshKey(state: PagingState<Int, Media>): Int? {
-        // Try to find the page key of the closest page to anchorPosition, from
-        // either the prevKey or the nextKey, but you need to handle nullability
-        // here:
-        //  * prevKey == null -> anchorPage is the first page.
-        //  * nextKey == null -> anchorPage is the last page.
-        //  * both prevKey and nextKey null -> anchorPage is the initial page, so
-        //    just return null.
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)

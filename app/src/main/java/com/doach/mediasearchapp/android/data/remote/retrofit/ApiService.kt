@@ -21,5 +21,4 @@ interface ApiService {
         @Query("page") page: Int? = null,
         @Query("size") size: Int? = null,
     ): ImageResponse
-
 }
