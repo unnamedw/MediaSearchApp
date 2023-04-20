@@ -19,6 +19,7 @@ import com.doach.mediasearchapp.android.presentation.MediaAdapter
 import com.doach.mediasearchapp.android.presentation.getContainer
 import com.doach.mediasearchapp.android.presentation.openCustomTab
 import com.doach.mediasearchapp.android.presentation.showToast
+import kotlinx.coroutines.flow.catch
 
 class HomeFragment: Fragment(), MenuProvider {
 

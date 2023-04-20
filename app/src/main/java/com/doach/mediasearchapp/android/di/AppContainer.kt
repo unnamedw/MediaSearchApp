@@ -101,7 +101,7 @@ class AppContainer(context: Context) {
     }
 
     fun provideGetMediaFlowByQueryUseCase(): GetMediaFlowByQueryUseCase {
-        return GetMediaFlowByQueryUseCaseImpl(mediaRepository)
+        return GetMediaFlowByQueryUseCaseImpl(mediaRepository, imageRepository, videoRepository)
     }
 
 }

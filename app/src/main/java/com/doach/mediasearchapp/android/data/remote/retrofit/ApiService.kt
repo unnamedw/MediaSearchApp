@@ -2,6 +2,7 @@ package com.doach.mediasearchapp.android.data.remote.retrofit
 
 import com.doach.mediasearchapp.android.data.remote.dto.ImageResponse
 import com.doach.mediasearchapp.android.data.remote.dto.VideoResponse
+import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -21,5 +22,4 @@ interface ApiService {
         @Query("page") page: Int? = null,
         @Query("size") size: Int? = null,
     ): ImageResponse
-
 }
