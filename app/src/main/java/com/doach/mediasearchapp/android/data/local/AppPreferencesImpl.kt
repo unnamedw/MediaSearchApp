@@ -6,8 +6,8 @@ import androidx.core.content.edit
 import com.doach.mediasearchapp.android.R
 import com.doach.mediasearchapp.android.domain.model.Media
 import com.doach.mediasearchapp.android.utils.MediaDeserializer
-import com.google.gson.*
-import com.google.gson.reflect.TypeToken
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonArray
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.json.JSONArray
@@ -60,3 +60,4 @@ class AppPreferencesImpl(context: Context): AppPreferences {
     }
 
 }
+
