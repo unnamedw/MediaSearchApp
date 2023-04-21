@@ -3,7 +3,7 @@ package com.doach.mediasearchapp.android.data
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.doach.mediasearchapp.android.data.local.AppPreferencesImpl
+import com.doach.mediasearchapp.android.data.local.MediaDao
 import com.doach.mediasearchapp.android.data.pagingsource.VideoPagingSource
 import com.doach.mediasearchapp.android.data.remote.VideoRemoteDataSource
 import com.doach.mediasearchapp.android.data.remote.dto.toDomainModel
@@ -17,7 +17,7 @@ import kotlinx.coroutines.withContext
 class VideoRepositoryImpl(
     private val api: ApiService,
     private val videoRemoteDataSource: VideoRemoteDataSource,
-    private val appPreferences: AppPreferencesImpl,
+    private val mediaDao: MediaDao,
     private val ioDispatcher: CoroutineDispatcher
 ): VideoRepository {
     override suspend fun getVideoList(

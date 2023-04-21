@@ -2,6 +2,7 @@ package com.doach.mediasearchapp.android.presentation.home
 
 import android.os.Bundle
 import android.view.*
+import android.view.MenuItem.OnActionExpandListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuProvider
@@ -20,9 +21,9 @@ import com.doach.mediasearchapp.android.presentation.MediaAdapter
 import com.doach.mediasearchapp.android.presentation.getContainer
 import com.doach.mediasearchapp.android.presentation.openCustomTab
 import com.doach.mediasearchapp.android.presentation.showToast
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.Timer
 
 class HomeFragment: Fragment(), MenuProvider {
 
@@ -30,10 +31,12 @@ class HomeFragment: Fragment(), MenuProvider {
     private val viewModel by viewModels<HomeViewModel> {
         HomeViewModel.Factory(
             getContainer().provideGetMediaFlowByQueryUseCase(),
-            getContainer().mediaRepository
+            getContainer().mediaRepository,
+            getContainer().searchRepository
         )
     }
     private val mediaAdapter: MediaAdapter = MediaAdapter()
+    private val searchHistoryAdapter: SearchHistoryAdapter = SearchHistoryAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,14 +65,49 @@ class HomeFragment: Fragment(), MenuProvider {
                 is Image -> showImage(media)
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.searchHistoryUiState.collect { state ->
+                searchHistoryAdapter.submitList(state.historyList)
+
+                if (state.isVisible) {
+                    binding.layoutSearchHistory.visibility = View.VISIBLE
+                } else {
+                    binding.layoutSearchHistory.visibility = View.GONE
+                }
+            }
+        }
+
     }
 
     private fun initView() {
+        setUpMediaList()
+        setUpSearchHistoryList()
+
+        binding.tvCloseSearchHistory.setOnClickListener { viewModel.hideHistoryList() }
+
+        binding.tvClearSearchHistory.setOnClickListener { viewModel.clearSearchHistory() }
+
         binding.swipeLayout.setOnRefreshListener {
             mediaAdapter.refresh()
             binding.swipeLayout.isRefreshing = false
         }
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setUpActionBar()
+    }
+
+    private fun setUpActionBar() {
+        (requireActivity() as AppCompatActivity).let {
+            it.setSupportActionBar(binding.toolbar)
+            it.addMenuProvider(this, viewLifecycleOwner)
+        }
+    }
+
+    private fun setUpMediaList() {
         mediaAdapter.addLoadStateListener { loadState ->
             val errorState = when {
                 loadState.append is LoadState.Error -> loadState.append as LoadState.Error
@@ -85,17 +123,8 @@ class HomeFragment: Fragment(), MenuProvider {
         binding.rvMediaList.adapter = mediaAdapter
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setUpActionBar()
-    }
-
-    private fun setUpActionBar() {
-        (requireActivity() as AppCompatActivity).let {
-            it.setSupportActionBar(binding.toolbar)
-            it.addMenuProvider(this, viewLifecycleOwner)
-        }
+    private fun setUpSearchHistoryList() {
+        binding.rvSearchHistoryList.adapter = searchHistoryAdapter
     }
 
     private fun showImage(image: Image) {
@@ -119,7 +148,20 @@ class HomeFragment: Fragment(), MenuProvider {
         menuInflater.inflate(R.menu.home_toolbar_menu, menu)
 
         // 검색 메뉴 세팅
-        (menu.findItem(R.id.menu_item_search).actionView as SearchView?)?.apply {
+        (menu.findItem(R.id.menu_item_search).apply {
+            setOnActionExpandListener(object : OnActionExpandListener {
+                override fun onMenuItemActionExpand(p0: MenuItem): Boolean {
+                    viewModel.showHistoryList()
+                    return true
+                }
+
+                override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
+                    viewModel.hideHistoryList()
+                    return true
+                }
+
+            })
+        }.actionView as SearchView?)?.apply {
             queryHint = getString(R.string.search_hint)
 
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -133,7 +175,6 @@ class HomeFragment: Fragment(), MenuProvider {
                 }
 
             })
-
         }
     }
 
