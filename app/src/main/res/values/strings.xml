@@ -13,8 +13,8 @@
     <string name="search_toolbar_menu_favorite_title">Favorite</string>
 
     <string name="favorite_toolbar_menu_sort_title">Sort</string>
-    <string name="favorite_toolbar_menu_sort_arrange_list_title">list</string>
-    <string name="favorite_toolbar_menu_sort_arrange_gallery_title">gallery</string>
+    <string name="favorite_toolbar_menu_sort_by_default_title">기본순</string>
+    <string name="favorite_toolbar_menu_sort_by_recent_title">최신순</string>
 
     <string name="iv_media_thumbnail_description">썸네일</string>
     <string name="iv_favorite_icon_description">좋아요</string>

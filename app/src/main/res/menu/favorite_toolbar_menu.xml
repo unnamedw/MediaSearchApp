@@ -9,11 +9,11 @@
         app:showAsAction="ifRoom">
         <menu>
             <item
-                android:id="@+id/menu_arrange_list"
-                android:title="@string/favorite_toolbar_menu_sort_arrange_list_title" />
+                android:id="@+id/menu_sort_by_default"
+                android:title="@string/favorite_toolbar_menu_sort_by_default_title" />
             <item
-                android:id="@+id/menu_arrange_gallery"
-                android:title="@string/favorite_toolbar_menu_sort_arrange_gallery_title" />
+                android:id="@+id/menu_sort_by_recent"
+                android:title="@string/favorite_toolbar_menu_sort_by_recent_title" />
         </menu>
     </item>
 
