@@ -8,7 +8,6 @@ import com.doach.mediasearchapp.android.domain.model.Media
 import com.doach.mediasearchapp.android.domain.model.SearchHistory
 import com.doach.mediasearchapp.android.utils.MediaDeserializer
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonArray
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -88,15 +87,16 @@ class AppPreferencesImpl(context: Context): MediaDao, SearchDao {
                 gson.fromJson(element.toString(), SearchHistory::class.java)
             }
 
-        }?.sortedByDescending {
-            it.timestamp
         } ?: emptyList()
     }
 
     override fun insertSearchHistory(vararg searchHistory: SearchHistory) {
         val updatedHistory = getSearchHistory().toMutableSet()
         val newHistory = searchHistory
-            .filterNot { updatedHistory.map { history -> history.query }.contains(it.query) }
+            .filterNot { toBeAdded ->
+                val existingQuery = updatedHistory.map { history -> history.query }
+                existingQuery.contains(toBeAdded.query)
+            }
 
         updatedHistory.addAll(newHistory)
 

@@ -39,13 +39,15 @@ class HomeViewModel(
         _isHistoryVisible
     ) { histories, isVisible ->
         SearchHistoryUiState(
-            historyList = histories.map { history ->
-                SearchHistoryItemUiState(
-                    item = history,
-                    onClick = ::onSearchHistoryItemClick,
-                    onRemoveClick = ::onRemoveSearchItemClick
-                )
-            },
+            historyList = histories
+                .sortedByDescending { it.timestamp }
+                .map { history ->
+                    SearchHistoryItemUiState(
+                        item = history,
+                        onClick = ::onSearchHistoryItemClick,
+                        onRemoveClick = ::onRemoveSearchItemClick
+                    )
+                },
             isVisible = isVisible
         )
     }
