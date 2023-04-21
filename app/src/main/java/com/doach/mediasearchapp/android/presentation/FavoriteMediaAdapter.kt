@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.doach.mediasearchapp.android.databinding.MediaViewholderBinding
+import com.doach.mediasearchapp.android.presentation.home.uistate.MediaItemUiState
 
 class FavoriteMediaAdapter: ListAdapter<MediaItemUiState, MediaViewHolder>(DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {

@@ -23,4 +23,6 @@
 <!--    <string name="search_fragment_load_error_toast">데이터를 가져오지 못했어요</string>-->
     <string name="tv_playtime_text">%1$d:%2$d:%3$d</string>
 
+    <string name="tv_close_search_history_text">닫기</string>
+    <string name="tv_clear_search_history_text">전체 기록 지우기</string>
 </resources>

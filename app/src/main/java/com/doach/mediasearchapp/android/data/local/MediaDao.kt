@@ -3,8 +3,11 @@ package com.doach.mediasearchapp.android.data.local
 import com.doach.mediasearchapp.android.domain.model.Media
 import kotlinx.coroutines.flow.Flow
 
-interface AppPreferences {
+interface MediaDao {
 
+    /**
+     * Media
+     * **/
     fun insertFavoriteMedia(vararg media: Media)
 
     fun getAllFavoriteMedia(): List<Media>
@@ -13,6 +16,6 @@ interface AppPreferences {
 
     fun removeFavoriteMedia(vararg media: Media)
 
-    fun removeAllFavoriteMedia()
+    fun clearFavoriteMedia()
 
 }

@@ -3,7 +3,7 @@ package com.doach.mediasearchapp.android.data
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.doach.mediasearchapp.android.data.local.AppPreferences
+import com.doach.mediasearchapp.android.data.local.MediaDao
 import com.doach.mediasearchapp.android.data.pagingsource.MediaPagingSource
 import com.doach.mediasearchapp.android.data.remote.retrofit.ApiService
 import com.doach.mediasearchapp.android.domain.model.Media
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.flowOn
 
 class MediaRepositoryImpl(
     private val api: ApiService,
-    private val appPreferences: AppPreferences,
+    private val appPreferences: MediaDao,
     private val ioDispatcher: CoroutineDispatcher
 ): MediaRepository {
 

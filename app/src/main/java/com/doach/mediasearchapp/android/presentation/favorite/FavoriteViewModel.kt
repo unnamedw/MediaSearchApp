@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.doach.mediasearchapp.android.domain.model.Media
 import com.doach.mediasearchapp.android.domain.repository.MediaRepository
-import com.doach.mediasearchapp.android.presentation.MediaItemUiState
+import com.doach.mediasearchapp.android.presentation.home.uistate.MediaItemUiState
 import com.doach.mediasearchapp.android.presentation.utils.SingleLiveEvent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine

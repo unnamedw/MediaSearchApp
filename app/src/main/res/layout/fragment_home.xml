@@ -22,12 +22,64 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <!--결과 목록-->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_media_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="3"/>
+
+            <!--검색 히스토리-->
+            <LinearLayout
+                android:id="@+id/layout_search_history"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@color/gray_0">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_search_history_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:orientation="vertical"/>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:id="@+id/tv_close_search_history"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|top"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="0dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:text="@string/tv_close_search_history_text"
+                        android:textColor="@color/gray_600"
+                        style="@style/Body03"/>
+
+                    <TextView
+                        android:id="@+id/tv_clear_search_history"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        style="@style/Body03"
+                        android:textColor="@color/gray_600"
+                        android:text="@string/tv_clear_search_history_text"/>
+                </FrameLayout>
+            </LinearLayout>
+
         </FrameLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
