@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import androidx.paging.map
 import com.doach.mediasearchapp.android.BuildConfig
 import com.doach.mediasearchapp.android.R
 import com.doach.mediasearchapp.android.databinding.FragmentHomeBinding
@@ -19,6 +20,9 @@ import com.doach.mediasearchapp.android.presentation.MediaAdapter
 import com.doach.mediasearchapp.android.presentation.getContainer
 import com.doach.mediasearchapp.android.presentation.openCustomTab
 import com.doach.mediasearchapp.android.presentation.showToast
+import kotlinx.coroutines.flow.catch
+import timber.log.Timber
+import java.util.Timer
 
 class HomeFragment: Fragment(), MenuProvider {
 
@@ -45,6 +49,7 @@ class HomeFragment: Fragment(), MenuProvider {
     private fun bindViewHolder() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.mediaFlow.collect {
+                Timber.d("collected >> ${it.map { item -> item.media }}")
                 mediaAdapter.submitData(it)
             }
         }

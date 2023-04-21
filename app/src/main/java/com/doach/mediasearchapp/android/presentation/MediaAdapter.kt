@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.doach.mediasearchapp.android.databinding.MediaViewholderBinding
 
 class MediaAdapter: PagingDataAdapter<MediaItemUiState, MediaViewHolder>(DIFF_CALLBACK) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
         return MediaViewHolder(
             MediaViewholderBinding.inflate(

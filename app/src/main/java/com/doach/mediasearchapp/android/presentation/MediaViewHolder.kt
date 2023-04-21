@@ -46,7 +46,7 @@ class MediaViewHolder(
             }
         }
 
-        binding.tvDate.text = uiState.media.timestamp.toFormattedTime("yyyy-MM-dd hh:mm:ss")
+        binding.tvDate.text = uiState.media.timestamp.toFormattedTime("yyyy-MM-dd HH:mm:ss")
 
         Glide.with(context)
             .load(uiState.media.thumbnailUrl)

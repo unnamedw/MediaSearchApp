@@ -14,7 +14,6 @@ class GetMediaFlowByQueryUseCaseImpl(
 ): GetMediaFlowByQueryUseCase {
 
     override suspend fun invoke(query: String, scope: CoroutineScope): Flow<PagingData<MediaWithFavorite>> {
-
         return combine(
             mediaRepository.getMediaFlow(query).cachedIn(scope),
             mediaRepository.getFavoriteMediaFlow()
@@ -27,5 +26,4 @@ class GetMediaFlowByQueryUseCaseImpl(
             }
         }
     }
-
 }
