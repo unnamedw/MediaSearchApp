@@ -1,5 +1,6 @@
 package com.doach.mediasearchapp.android.presentation.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -33,17 +34,19 @@ class HomeViewModel(
         pagingDataFlow(it)
     }.map {
         it.map { mediaWithFavorite ->
+            Log.d("my_test", mediaWithFavorite.media.toString())
             MediaItemUiState(
                 media = mediaWithFavorite.media,
-                onClick = { clickMediaItem(mediaWithFavorite.media) },
-                onFavoriteClick = { state -> clickFavorite(state) },
+                onItemClick = ::onItemClick,
+                onFavoriteClick = ::onFavoriteClick,
                 isFavorite = mediaWithFavorite.isFavorite
             )
         }
-    }.catch {
-        _eventShowToast.value = it.message
-//        emptyFlow<PagingData<MediaItemUiState>>()
     }.cachedIn(viewModelScope)
+        .catch {
+            _eventShowToast.value = it.message.toString()
+        }
+
 
     private suspend fun pagingDataFlow(queryString: String): Flow<PagingData<MediaWithFavorite>> =
         getMediaFlowByQueryUseCase.invoke(queryString, viewModelScope)
@@ -54,11 +57,11 @@ class HomeViewModel(
         }
     }
 
-    private fun clickMediaItem(media: Media) {
-        _eventShowMediaDetail.value = media
+    private fun onItemClick(uiState: MediaItemUiState) {
+        _eventShowMediaDetail.value = uiState.media
     }
 
-    private fun clickFavorite(uiState: MediaItemUiState) {
+    private fun onFavoriteClick(uiState: MediaItemUiState) {
         when {
             uiState.isFavorite -> mediaRepository.removeMedia(uiState.media)
 

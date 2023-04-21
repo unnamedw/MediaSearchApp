@@ -20,7 +20,7 @@ class ImagePagingSource(
                 page = nextPageNumber
             )
 
-            val nextKey = if (response.meta.isEnd) null else startPage + params.loadSize
+            val nextKey = if (response.meta.isEnd) null else nextPageNumber + 1
 
             LoadResult.Page(
                 data = response.documents.map { it.toDomainModel() },

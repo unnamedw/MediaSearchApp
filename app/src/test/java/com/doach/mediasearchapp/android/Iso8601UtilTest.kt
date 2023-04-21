@@ -9,27 +9,17 @@ import org.junit.runners.JUnit4
 @RunWith(JUnit4::class)
 class Iso8601UtilTest {
 
-    private val testISO8601Str = "2023-01-25T00:00:01.000+09:00"
-    private val testTimeMillis = 1674572401000
+    private val testISO8601Str = "2023-04-20T23:59:04.000+09:00"
+    private val testTimeMillis = 1682002744000
 
     @Test
     fun iso8601_to_timeMillis_should_return_true() {
-        Assert.assertTrue(Iso8601Util.toMillis(testISO8601Str) == testTimeMillis)
-    }
-
-    @Test
-    fun iso8601_to_timeMillis_should_return_false() {
-        Assert.assertFalse(Iso8601Util.toMillis(testISO8601Str) == 0L)
+        Assert.assertEquals(testTimeMillis, Iso8601Util.toMillis(testISO8601Str))
     }
 
     @Test
     fun timeMillis_to_iso8601_should_return_true() {
-        Assert.assertTrue(Iso8601Util.toIso8601(testTimeMillis) == testISO8601Str)
-    }
-
-    @Test
-    fun timeMillis_to_iso8601_should_return_false() {
-        Assert.assertFalse(Iso8601Util.toIso8601(0L) == testISO8601Str)
+        Assert.assertEquals(testISO8601Str, Iso8601Util.toIso8601(testTimeMillis))
     }
 
 }

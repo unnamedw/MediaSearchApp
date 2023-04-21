@@ -9,7 +9,6 @@ object Iso8601Util {
 
     private val format get() = SimpleDateFormat(ISO8601_FORMAT, Locale.KOREA).apply {
         timeZone = TimeZone.getTimeZone("Asia/Seoul")
-
     }
 
     @Throws(Exception::class)
