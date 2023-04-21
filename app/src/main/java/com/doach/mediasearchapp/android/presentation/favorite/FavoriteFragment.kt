@@ -91,16 +91,12 @@ class FavoriteFragment: Fragment(), MenuProvider {
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
-            R.id.menu_arrange_list -> {
-                if (BuildConfig.DEBUG) {
-                    showToast("click list!")
-                }
+            R.id.menu_sort_by_default -> {
+                viewModel.changeSortType(SortType.DEFAULT)
                 true
             }
-            R.id.menu_arrange_gallery -> {
-                if (BuildConfig.DEBUG) {
-                    showToast("click gallery!")
-                }
+            R.id.menu_sort_by_recent -> {
+                viewModel.changeSortType(SortType.RECENT)
                 true
             }
             else -> true
