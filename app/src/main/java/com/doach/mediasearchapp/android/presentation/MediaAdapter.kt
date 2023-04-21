@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.doach.mediasearchapp.android.databinding.MediaViewholderBinding
+import com.doach.mediasearchapp.android.presentation.home.uistate.MediaItemUiState
 
 class MediaAdapter: PagingDataAdapter<MediaItemUiState, MediaViewHolder>(DIFF_CALLBACK) {
 

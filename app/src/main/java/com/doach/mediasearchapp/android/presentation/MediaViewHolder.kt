@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.doach.mediasearchapp.android.R
 import com.doach.mediasearchapp.android.databinding.MediaViewholderBinding
-import com.doach.mediasearchapp.android.domain.model.Media
 import com.doach.mediasearchapp.android.domain.model.Video
+import com.doach.mediasearchapp.android.presentation.home.uistate.MediaItemUiState
 
 class MediaViewHolder(
     private val binding: MediaViewholderBinding
@@ -56,9 +56,3 @@ class MediaViewHolder(
             .into(binding.ivThumbnail)
     }
 }
-data class MediaItemUiState(
-    val media: Media,
-    val onItemClick: (MediaItemUiState) -> Unit,
-    val onFavoriteClick: (MediaItemUiState) -> Unit,
-    val isFavorite: Boolean = false
-)

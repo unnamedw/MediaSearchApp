@@ -4,6 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.doach.mediasearchapp.android.data.local.AppPreferencesImpl
+import com.doach.mediasearchapp.android.data.local.MediaDao
 import com.doach.mediasearchapp.android.data.pagingsource.ImagePagingSource
 import com.doach.mediasearchapp.android.data.remote.ImageRemoteDataSource
 import com.doach.mediasearchapp.android.data.remote.dto.toDomainModel
@@ -17,7 +18,7 @@ import kotlinx.coroutines.withContext
 class ImageRepositoryImpl(
     private val api: ApiService,
     private val imageRemoteDataSource: ImageRemoteDataSource,
-    private val appPreferences: AppPreferencesImpl,
+    private val mediaDao: MediaDao,
     private val ioDispatcher: CoroutineDispatcher
 ): ImageRepository {
     override suspend fun getImageList(

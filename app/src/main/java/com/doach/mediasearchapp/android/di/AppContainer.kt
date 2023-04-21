@@ -4,6 +4,7 @@ import android.content.Context
 import com.doach.mediasearchapp.android.R
 import com.doach.mediasearchapp.android.data.ImageRepositoryImpl
 import com.doach.mediasearchapp.android.data.MediaRepositoryImpl
+import com.doach.mediasearchapp.android.data.SearchHistoryRepositoryImpl
 import com.doach.mediasearchapp.android.data.VideoRepositoryImpl
 import com.doach.mediasearchapp.android.data.remote.retrofit.ApiService
 import com.doach.mediasearchapp.android.data.local.AppPreferencesImpl
@@ -13,6 +14,7 @@ import com.doach.mediasearchapp.android.data.remote.retrofit.AuthenticationInter
 import com.doach.mediasearchapp.android.data.remote.retrofit.ResultCallAdapterFactory
 import com.doach.mediasearchapp.android.domain.repository.ImageRepository
 import com.doach.mediasearchapp.android.domain.repository.MediaRepository
+import com.doach.mediasearchapp.android.domain.repository.SearchHistoryRepository
 import com.doach.mediasearchapp.android.domain.repository.VideoRepository
 import com.doach.mediasearchapp.android.domain.usecase.GetLatestMediaByQueryUseCase
 import com.doach.mediasearchapp.android.domain.usecase.GetLatestMediaByQueryUseCaseImpl
@@ -28,10 +30,9 @@ import java.util.concurrent.TimeUnit
 
 /**
  * 의존성 주입을 위한 컨테이너
- *
- * TODO: 시간이 남는 경우 hilt 로 migration.
  * **/
 class AppContainer(context: Context) {
+    // TODO("시간이 남는 경우 hilt 로 migration")
 
     private val retrofitClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
@@ -71,7 +72,7 @@ class AppContainer(context: Context) {
         ImageRepositoryImpl(
             api = apiService,
             imageRemoteDataSource = imageRemoteDataSource,
-            appPreferences = appPreferences,
+            mediaDao = appPreferences,
             ioDispatcher = Dispatchers.IO
         )
     }
@@ -80,7 +81,7 @@ class AppContainer(context: Context) {
         VideoRepositoryImpl(
             api = apiService,
             videoRemoteDataSource = videoRemoteDataSource,
-            appPreferences = appPreferences,
+            mediaDao = appPreferences,
             ioDispatcher = Dispatchers.IO
         )
     }
@@ -90,6 +91,12 @@ class AppContainer(context: Context) {
             api = apiService,
             appPreferences = appPreferences,
             ioDispatcher = Dispatchers.IO
+        )
+    }
+
+    val searchRepository: SearchHistoryRepository by lazy {
+        SearchHistoryRepositoryImpl(
+            searchDao = appPreferences
         )
     }
 
