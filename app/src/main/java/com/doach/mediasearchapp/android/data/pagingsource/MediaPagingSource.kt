@@ -10,62 +10,80 @@ import kotlinx.coroutines.supervisorScope
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
+import java.io.InvalidClassException
 
 class MediaPagingSource(
     private val api: ApiService,
     private val query: String
 ): PagingSource<Int, Media>() {
 
+    private var isImageChunkEnd = false
+    private var isVideoChunkEnd = false
+
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Media> = supervisorScope {
         Timber.d("paging test >> key: ${params.key}, loadSize: ${params.loadSize}")
+
         return@supervisorScope try {
-            val nextPageNumber = params.key ?: startPage
-            val videoResponseAsync = async {
-                api.getVideoList(
-                    query = query,
-                    sort = "recency",
-                    page = nextPageNumber
-                )
+            val key = params.key ?: startPage
+            val videoResponseAsync = if (isVideoChunkEnd) null else async {
+                try {
+                    api.getVideoList(
+                        query = query,
+                        sort = "recency",
+                        page = key
+                    )
+                } catch (e: HttpException) {
+
+                    // 해당 API response metadata에 isEnd가 내려오지 않고
+                    // exception으로 페이징을 끝내는 경우가 있기 때문에
+                    // null을 return하고 이를 마지막 페이지로 간주하도록 함
+                    null
+                } catch (e: Exception) {
+                    throw e
+                }
             }
-            val imageResponseAsync = async {
-                api.getImageList(
-                    query = query,
-                    sort = "recency",
-                    page = nextPageNumber
-                )
+            val imageResponseAsync = if (isImageChunkEnd) null else async {
+                try {
+                    api.getImageList(
+                        query = query,
+                        sort = "recency",
+                        page = key
+                    )
+                } catch (e: HttpException) {
+                    null
+                } catch (e: Exception) {
+                    throw e
+                }
             }
 
-            val videoResponse = videoResponseAsync.await()
-            val imageResponse = imageResponseAsync.await()
+            val videoResponse = videoResponseAsync?.await()
+            val imageResponse = imageResponseAsync?.await()
 
-            val nextKey = if (imageResponse.meta.isEnd && videoResponse.meta.isEnd) {
-                null
-            } else {
-                nextPageNumber + 1
+            isVideoChunkEnd = videoResponse == null || videoResponse.meta.isEnd
+            isImageChunkEnd = imageResponse == null || imageResponse.meta.isEnd
+
+            if (isVideoChunkEnd && isImageChunkEnd) {
+                return@supervisorScope LoadResult.Error(Exception("페이지가 더 이상 존재하지 않습니다"))
             }
+
+            val nextKey = key + 1
 
             Timber.d("nextKey >> $nextKey")
 
-            val videoList = videoResponse.documents.map { it.toDomainModel() }
-            val imageList = imageResponse.documents.map { it.toDomainModel() }
+            val videoChunk = videoResponse?.documents?.map { it.toDomainModel() } ?: emptyList()
+            val imageChunk = imageResponse?.documents?.map { it.toDomainModel() } ?: emptyList()
 
-            val mediaList = videoList.plus(imageList).sortedByDescending { it.timestamp }
+            // 정렬은 paging chunk 단위로 수행된다.
+            val mediaList = videoChunk.plus(imageChunk).sortedByDescending { it.timestamp }
 
             LoadResult.Page(
                 data = mediaList,
                 prevKey = null,
                 nextKey = nextKey
             )
-        } catch (e: IOException) {
+        } catch (e: Exception) {
             e.printStackTrace()
-            LoadResult.Error(e)
-        } catch (e: HttpException) {
-            e.printStackTrace()
-            if (e.code() == 400) {
-                LoadResult.Error(Exception("페이지가 더 이상 존재하지 않습니다"))
-            } else {
-                LoadResult.Error(e)
-            }
+            LoadResult.Error(Exception("예상하지 못한 문제가 발생했어요.", e))
         }
     }
 
