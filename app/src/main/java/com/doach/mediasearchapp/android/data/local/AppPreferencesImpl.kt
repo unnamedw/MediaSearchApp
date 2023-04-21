@@ -37,9 +37,17 @@ class AppPreferencesImpl(context: Context): AppPreferences {
     }
 
     override fun insertFavoriteMedia(vararg media: Media) {
-        val updatedMedia = getAllFavoriteMedia().toMutableSet().apply { addAll(media) }
-        prefs.edit { putString(KEY_MEDIA, gson.toJson(updatedMedia)).commit() }
-        _favoriteMediaFlow.value = updatedMedia.toList()
+        val updatedList = getAllFavoriteMedia().toMutableSet()
+        val newList = media
+            .filterNot { toBeAdded ->
+                val existingUrl = updatedList.map { it.url }
+                existingUrl.contains(toBeAdded.url)
+            }
+
+        updatedList.addAll(newList)
+
+        prefs.edit { putString(KEY_MEDIA, gson.toJson(updatedList)).commit() }
+        _favoriteMediaFlow.value = updatedList.toList()
     }
 
     override fun removeFavoriteMedia(vararg media: Media) {
