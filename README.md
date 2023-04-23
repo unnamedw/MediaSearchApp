@@ -26,9 +26,9 @@ Daum 검색 API를 이용해 이미지 및 비디오를 검색할 수 있는 서
 기본적인 구조는 [권장 아키텍처](https://developer.android.com/topic/architecture?hl=ko) 를 따르고 있습니다.  
 
 
-Ui Layer에서는 비즈니스 로직을 캡슐화한 경우엔 usecase를 참조하고 있으며, 이외의 경우 repository를 참조하는 형태입니다.  
-Domain Layer에서는 다른 어떤 계층에 대해서도 직접적인 의존성을 가지지 않습니다. 또한 Android의 의존성을 가지는 것을 최대한 지양하였습니다.  
-Data Layer에서는 Retrofit을 사용한 RemoteDataSource와 SharedPreferences를 사용한 LocalDataSource를 가집니다.  
+- ##### Ui Layer에서는 비즈니스 로직을 캡슐화한 경우엔 usecase를 참조하고 있으며, 이외의 경우 repository를 참조하는 형태입니다.  
+- ##### Domain Layer에서는 다른 어떤 계층에 대해서도 직접적인 의존성을 가지지 않습니다. 또한 Android의 의존성을 가지는 것을 최대한 지양하였습니다.  
+- ##### Data Layer에서는 Retrofit을 사용한 RemoteDataSource와 SharedPreferences를 사용한 LocalDataSource를 가집니다.  
 
 
 Local Source의 경우 간단한 구현을 위해 SharedPreferences를 사용하였습니다.
