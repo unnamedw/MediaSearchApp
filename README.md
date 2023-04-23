@@ -12,4 +12,5 @@ Daum 검색 API를 이용해 이미지 및 비디오를 검색할 수 있는 앱
 
 <계층구조>
 
-![architecture drawio](https://user-images.githubusercontent.com/56429036/233818497-5c24a1da-5059-49cb-aa91-0608daa8b523.png)
+![architecture drawio (3)](https://user-images.githubusercontent.com/56429036/233818572-d3fcc7b2-b389-4d0c-b3da-385385516e4e.png)
+
